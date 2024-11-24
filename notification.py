@@ -103,8 +103,9 @@ class FeishuNotifier:
 
     def format_daily_report(self, balances: List[Dict], positions: List[Dict]) -> str:
         """格式化每日报告"""
-        # 获取时间
-        current_date = datetime.now().strftime('%Y-%m-%d')
+        # 获取美东时间
+        eastern = pytz.timezone('America/New_York')
+        current_date = datetime.now(pytz.UTC).astimezone(eastern).strftime('%Y-%m-%d')
         
         # 生成报告内容
         report = [f"📊 每日账户报告 ({current_date})\n"]
