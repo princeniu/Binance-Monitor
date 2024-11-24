@@ -42,7 +42,7 @@ class FeishuNotifier:
                 )
 
         if changes['closed_positions']:
-            messages.append("❌ 已���仓:")
+            messages.append("❌ 已平仓:")
             for pos in changes['closed_positions']:
                 current_price = exchange.fetch_ticker(pos['symbol'])['last']
                 
