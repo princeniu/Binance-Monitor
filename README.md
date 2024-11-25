@@ -133,6 +133,9 @@ pip install -r requirements.txt
      - FEISHU_WEBHOOK_URL: Feishu bot Webhook URL
      - NOTIFY_INTERVAL: Monitoring interval (seconds)
      - DAILY_REPORT_TIME: Daily report time (format: HH:MM)
+     - NOTIFICATION_TYPE: Notification channel (FEISHU/TELEGRAM)
+     - TELEGRAM_BOT_TOKEN: Telegram bot token
+     - TELEGRAM_CHAT_ID: Telegram chat ID
 
 ## Usage
 
@@ -171,7 +174,7 @@ Configuration method:
 
    - TELEGRAM_BOT_TOKEN: Bot token obtained from @BotFather
    - TELEGRAM_CHAT_ID: Target chat ID
-   - NOTIFICATION_CHANNEL: Choose 'FEISHU' or 'TELEGRAM'
+   - NOTIFICATION_TYPE: Choose 'FEISHU' or 'TELEGRAM'
 
 2. When configured as TELEGRAM:
    - All notifications will be sent through Telegram bot

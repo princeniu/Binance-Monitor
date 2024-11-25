@@ -133,6 +133,9 @@ pip install -r requirements.txt
      - FEISHU_WEBHOOK_URL: 飞书机器人 Webhook URL
      - NOTIFY_INTERVAL: 监控间隔（秒）
      - DAILY_REPORT_TIME: 每日报告时间（格式：HH:MM）
+     - NOTIFICATION_TYPE: 通知渠道（FEISHU/TELEGRAM）
+     - TELEGRAM_BOT_TOKEN: Telegram 机器人 token
+     - TELEGRAM_CHAT_ID: Telegram 聊天 ID
 
 ## 使用方法
 
@@ -171,7 +174,7 @@ python main.py
 
    - TELEGRAM_BOT_TOKEN：从 @BotFather 获取的机器人 token
    - TELEGRAM_CHAT_ID：目标聊天 ID
-   - NOTIFICATION_CHANNEL：选择 'FEISHU' 或 'TELEGRAM'
+   - NOTIFICATION_TYPE：选择 'FEISHU' 或 'TELEGRAM'
 
 2. 当配置为 TELEGRAM 时：
 
