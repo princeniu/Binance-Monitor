@@ -1,62 +1,67 @@
-# 币安账户监控系统
+# Binance Account Monitoring System
 
-该项目用于监控币安合约主账户和子账户的仓位变化和资产情况，并通过飞书进行通知。系统会实时监控账户仓位变化，在发生开仓、平仓等操作时立即通知，并在每天固定时间发送账户总资产报告。
+<p align="center">
+  <a href="#readme">English</a> | 
+  <a href="./README_CN.md">简体中文</a>
+</p>
 
-## 功能特性
+This project is used to monitor position changes and asset status of Binance futures main account and sub-accounts, with notifications through Feishu. The system monitors account position changes in real-time, sends immediate notifications for opening and closing positions, and sends daily account total asset reports at fixed times.
 
-- 支持主账户和子账户同时监控
-- 实时监控币安合约账户仓位变化
-- 自动识别开仓和平仓操作
-- 每日定时发送账户总资产报告
-- 通过飞书机器人发送通知
-- 支持自定义监控间隔和报告时间
-- 异常自动重试和错误通知
-- 支持持仓时长统计
-- 支持收益率计算和展示
-- 按盈亏排序的持仓展示
-- 多账户资产汇总统计
+## Features
 
-## 通知功能详解
+- Supports simultaneous monitoring of main account and sub-accounts
+- Real-time monitoring of Binance futures account position changes
+- Automatic identification of opening and closing positions
+- Daily scheduled account total asset reports
+- Notifications through Feishu bot
+- Customizable monitoring intervals and report times
+- Automatic retry and error notifications
+- Support for position duration statistics
+- Support for profit/loss calculation and display
+- Position display sorted by profit/loss
+- Multi-account asset summary statistics
 
-### 仓位变化通知
+## Notification Features Explained
 
-- 新开仓通知：
+### Position Change Notifications
 
-  - 账户类型（主账户/子账户）
-  - 币种和交易对
-  - 开仓方向（做多/做空）
-  - 开仓价格
-  - 开仓数量
-  - 使用保证金
-  - 开仓时间（美东时间）
+- New Position Notifications:
 
-- 平仓通知：
-  - 账户类型（主账户/子账户）
-  - 币种和交易对
-  - 持仓方向
-  - 开仓价格和平仓价格
-  - 持仓数量
-  - 盈亏金额和收益率
-  - 持仓时长（天/小时/分钟）
-  - 平仓时间（美东时间）
+  - Account type (Main Account/Sub Account)
+  - Currency and trading pair
+  - Position direction (Long/Short)
+  - Opening price
+  - Position size
+  - Margin used
+  - Opening time (Eastern Time)
 
-### 每日账户报告
+- Closing Position Notifications:
+  - Account type (Main Account/Sub Account)
+  - Currency and trading pair
+  - Position direction
+  - Opening and closing prices
+  - Position size
+  - Profit/loss amount and return rate
+  - Position duration (days/hours/minutes)
+  - Closing time (Eastern Time)
 
-- 账户概览：
-  - 主账户总资产（USDT）
-  - 子账户总资产（USDT）
-  - 账户组合总资产
-  - 各账户可用余额
-  - 各账户占用保证金
-  - 各账户未实现盈亏
-- 持仓明细（按账户和盈亏排序）：
-  - 账户类型
-  - 交易对
-  - 持仓方向
-  - 未实现盈亏
-  - 收益率百分比
+### Daily Account Report
 
-## 安装要求
+- Account Overview:
+  - Main account total assets (USDT)
+  - Sub-account total assets (USDT)
+  - Account portfolio total assets
+  - Available balance for each account
+  - Margin occupied for each account
+  - Unrealized PnL for each account
+- Position Details (sorted by account and PnL):
+  - Account type
+  - Trading pair
+  - Position direction
+  - Unrealized PnL
+  - Return rate percentage
+
+## Installation Requirements
 
 - Python 3.8+
 - ccxt >= 2.0.0
@@ -64,164 +69,163 @@
 - schedule >= 1.1.0
 - python-dotenv >= 0.19.0
 
-## 安装步骤
+## Installation Steps
 
-如果部署在服务器：
+If deploying on a server:
 
 ```bash
-# 下载 miniconda
+# Download miniconda
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
-# 添加执行权限
+# Add execution permissions
 chmod +x Miniconda3-latest-Linux-x86_64.sh
 
-# 安装 miniconda
+# Install miniconda
 ./Miniconda3-latest-Linux-x86_64.sh
 
-# 更新 bashrc
+# Update bashrc
 source ~/.bashrc
 
-# 安装 screen（如果未安装）
+# Install screen (if not installed)
 yum install screen -y
 
-# 创建 screen 会话
+# Create screen session
 screen -S binance_monitor
 
-# 退出 screen 会话
+# Exit screen session
 # ctrl + a + d
 
-# 重连会话
+# Reconnect session
 screen -r binance_monitor
 ```
 
-1. 克隆项目到本地
-2. 创建虚拟环境
+1. Clone project locally
+2. Create virtual environment
 
 ```bash
 conda create -n binance_monitor
 conda activate binance_monitor
 conda install pip
 
-# 查看环境
+# View environments
 # conda env list
 
-# 退出环境
+# Exit environment
 # conda deactivate
 
-# 删除环境
+# Remove environment
 # conda env remove -n binance_monitor
 ```
 
-3. 安装依赖：
+3. Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. 配置环境变量：
-   - 复制 `.env.example` 为 `.env`
-   - 填入以下配置：
-     - BINANCE_API_KEY: 主账户币安 API Key
-     - BINANCE_API_SECRET: 主账户币安 API Secret
-     - SUB_ACCOUNT_API_KEY: 子账户币安 API Key
-     - SUB_ACCOUNT_API_SECRET: 子账户币安 API Secret
-     - FEISHU_WEBHOOK_URL: 飞书机器人 Webhook URL
-     - NOTIFY_INTERVAL: 监控间隔（秒）
-     - DAILY_REPORT_TIME: 每日报告时间（格式：HH:MM）
+3. Configure environment variables:
+   - Copy `.env.example` to `.env`
+   - Fill in the following configurations:
+     - BINANCE_API_KEY: Main account Binance API Key
+     - BINANCE_API_SECRET: Main account Binance API Secret
+     - SUB_ACCOUNT_API_KEY: Sub-account Binance API Key
+     - SUB_ACCOUNT_API_SECRET: Sub-account Binance API Secret
+     - FEISHU_WEBHOOK_URL: Feishu bot Webhook URL
+     - NOTIFY_INTERVAL: Monitoring interval (seconds)
+     - DAILY_REPORT_TIME: Daily report time (format: HH:MM)
 
-## 使用方法
+## Usage
 
-1. 确保配置正确后，运行主程序：
+1. After ensuring correct configuration, run the main program:
 
 ```bash
 python main.py
 ```
 
-2. 程序启动后会：
-   - 立即发送一次账户报告
-   - 按照设定的间隔监控仓位变化
-   - 在每天指定时间发送日报
+2. After program startup:
+   - Immediately sends an account report
+   - Monitors position changes according to set interval
+   - Sends daily report at specified time
 
-## 通知服务
+## Notification Services
 
-系统支持多种通知渠道：
+The system supports multiple notification channels:
 
-### 飞书通知
+### Feishu Notifications
 
-- 通过飞书机器人 Webhook 发送通知
-- 支持富文本格式
-- 实时仓位变动通知
-- 每日账户报告
+- Send notifications through Feishu bot Webhook
+- Support rich text format
+- Real-time position change notifications
+- Daily account reports
 
-### Telegram 通知
+### Telegram Notifications
 
-- 通过 Telegram Bot 发送通知
-- 支持实时查询功能
-- 支持命令交互
-- 支持消息格式化
+- Send notifications through Telegram Bot
+- Support real-time query functionality
+- Support command interaction
+- Support message formatting
 
-配置方式：
+Configuration method:
 
-1. 用户需要在 .env 文件中配置：
+1. Users need to configure in .env file:
 
-   - TELEGRAM_BOT_TOKEN：从 @BotFather 获取的机器人 token
-   - TELEGRAM_CHAT_ID：目标聊天 ID
-   - NOTIFICATION_CHANNEL：选择 'FEISHU' 或 'TELEGRAM'
+   - TELEGRAM_BOT_TOKEN: Bot token obtained from @BotFather
+   - TELEGRAM_CHAT_ID: Target chat ID
+   - NOTIFICATION_CHANNEL: Choose 'FEISHU' or 'TELEGRAM'
 
-2. 当配置为 TELEGRAM 时：
+2. When configured as TELEGRAM:
+   - All notifications will be sent through Telegram bot
+   - Sending "query" message to the bot will immediately return current account asset report (without position information)
 
-   - 所有通知将通过 Telegram 机器人发送
-   - 向机器人发送"查询"消息时，将立即返回当前账户资产报告（不含持仓信息）
+## System Features
 
-## 系统特性
+### Timezone Handling
 
-### 时区处理
+- All time displays use Eastern Time (ET)
+- Automatic daylight saving time conversion
 
-- 所有时间显示均采用美东时间（ET）
-- 自动处理夏令时转换
+### Error Handling Mechanism
 
-### 错误处理机制
+- Automatic retry for API call failures
+- Automatic reconnection for network exceptions
+- Critical error logging
+- Real-time notification for exceptions
+- Scheduler exception auto-recovery
 
-- API 调用失败自动重试
-- 网络异常自动重连
-- 关键错误日志记录
-- 异常情况实时通知
-- 调度器异常自动恢复
+### Performance Optimization
 
-### 性能优化
+- Use ccxt library to ensure API call rate limits
+- Reasonable monitoring interval settings
+- Efficient data structures for storing historical positions
+- Multi-account concurrent monitoring optimization
 
-- 使用 ccxt 库确保 API 调用限频
-- 合理的监控间隔设置
-- 高效的数据结构存储历史仓位
-- 多账户并发监控优化
+### Connection Monitoring Features
 
-### 连接监控功能
+- Automatic system connection status detection
+- Immediate notification on disconnection
+- Automatic reconnection mechanism
+- Recovery notification after successful reconnection
+- Warning for multiple reconnection failures
+- Configurable reconnection interval and maximum retry attempts
 
-- 自动检测系统连接状态
-- 断联时立即发送通知
-- 自动重连机制
-- 重连成功后发送恢复通知
-- 多次重连失败发送警告
-- 可配置重连间隔和最大重试次数
+## Development Plan
 
-## 开发计划
+### Near-term Plans
 
-### 近期计划
+- [ ] Support more sub-account monitoring
+- [ ] Add chart display functionality
+- [ ] Support custom notification templates
+- [ ] Add account portfolio analysis functionality
+- [ ] Add more notification channels (like WeCom, Discord, etc.)
 
-- [ ] 支持更多子账户监控
-- [ ] 添加图表展示功能
-- [ ] 支持自定义通知模板
-- [ ] 添加账户组合分析功能
-- [ ] 添加更多通知渠道（如企业微信、Discord 等）
+### Items to Optimize
 
-### 待优化项目
+- [ ] Add unit tests
+- [ ] Optimize error retry mechanism
+- [ ] Add data persistence storage
+- [ ] Add Web management interface
+- [ ] Optimize multi-account concurrent monitoring
 
-- [ ] 添加单元测试
-- [ ] 优化错误重试机制
-- [ ] 增加数据持久化存储
-- [ ] 添加 Web 管理界面
-- [ ] 优化多账户并发监控
-
-## 许可证
+## License
 
 MIT License
