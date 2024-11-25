@@ -2,6 +2,9 @@ import ccxt
 from typing import Dict, List
 from datetime import datetime
 import pytz
+import logging
+
+logger = logging.getLogger(__name__)
 
 class BinanceClient:
     def __init__(self, config: dict):
@@ -106,3 +109,38 @@ class BinanceClient:
 
         self._last_positions = current_positions
         return changes 
+
+    async def get_account_overview(self) -> str:
+        """Get account overview including main and sub-accounts"""
+        try:
+            # 获取主账户资产
+            main_account = await self.client.futures_account()
+            total_wallet_balance = float(main_account['totalWalletBalance'])
+            total_unrealized_profit = float(main_account['totalUnrealizedProfit'])
+            
+            message = "📊 账户资产概览\n\n"
+            message += "主账户:\n"
+            message += f"💰 钱包余额: {total_wallet_balance:.2f} USDT\n"
+            message += f"📈 未实现盈亏: {total_unrealized_profit:.2f} USDT\n"
+            message += f"🏦 总资产: {(total_wallet_balance + total_unrealized_profit):.2f} USDT\n\n"
+
+            # 获取子账户资产（如果有的话）
+            try:
+                sub_accounts = await self.client.futures_sub_account_list()
+                if sub_accounts:
+                    message += "子账户:\n"
+                    for account in sub_accounts:
+                        email = account['email']
+                        balance = float(account['totalWalletBalance'])
+                        unrealized = float(account.get('totalUnrealizedProfit', 0))
+                        message += f"📧 {email}\n"
+                        message += f"💰 钱包余额: {balance:.2f} USDT\n"
+                        message += f"📈 未实现盈亏: {unrealized:.2f} USDT\n"
+                        message += f"🏦 总资产: {(balance + unrealized):.2f} USDT\n\n"
+            except:
+                pass  # 如果没有子账户或没有权限，就跳过
+
+            return message
+        except Exception as e:
+            logger.error(f"Error getting account overview: {e}")
+            return "获取账户概览失败"

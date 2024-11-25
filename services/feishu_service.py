@@ -117,18 +117,18 @@ class FeishuNotifier:
         # 添加总资产信息
         report.extend([
             "💰 账户组合总览",
-            f"总资产: ${total_assets:.2f}",
-            f"总未实现盈亏: ${total_pnl:.2f}\n"
+            f"总资产: ${total_assets:.2f} USDT",
+            f"总未实现盈亏: ${total_pnl:.2f} USDT\n"
         ])
         
         # 添加每个账户的余额信息
         for balance in balances:
             report.extend([
                 f"【{balance['account_name']}】",
-                f"账户资产: ${balance['total_balance']:.2f}",
-                f"可用余额: ${balance['free_balance']:.2f}",
-                f"占用保证金: ${balance['used_balance']:.2f}",
-                f"账户未实现盈亏: ${balance['total_unrealized_pnl']:.2f}\n"
+                f"账户资产: ${balance['total_balance']:.2f} USDT",
+                f"可用余额: ${balance['free_balance']:.2f} USDT",
+                f"占用保证金: ${balance['used_balance']:.2f} USDT",
+                f"未实现盈亏: ${balance['total_unrealized_pnl']:.2f} USDT\n"
             ])
 
         # 生成完整报告（用于发送通知）
@@ -155,7 +155,7 @@ class FeishuNotifier:
             
             # 先添加主账户持仓
             if main_positions:
-                report.append("主账户持仓:")
+                report.append("📍 主账户持仓:")
                 for pos in main_positions:
                     report.append(
                         f"{pos['base_currency']}: {pos['side']} "
@@ -166,7 +166,7 @@ class FeishuNotifier:
             if sub_positions:
                 if main_positions:  # 如果有主账户持仓，添加一个空行分隔
                     report.append("")
-                report.append("子账户持仓:")
+                report.append("📍 子账户持仓:")
                 for pos in sub_positions:
                     report.append(
                         f"{pos['base_currency']}: {pos['side']} "

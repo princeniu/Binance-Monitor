@@ -42,7 +42,6 @@ class TaskScheduler:
 
     def run(self):
         """运行调度器"""
-        print("按 Ctrl+C 可安全退出程序")
         while self.running:
             try:
                 schedule.run_pending()
