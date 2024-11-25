@@ -5,7 +5,7 @@
   <a href="./README_CN.md">简体中文</a>
 </p>
 
-This project is used to monitor position changes and asset status of Binance futures main account and sub-accounts, with notifications through Feishu. The system monitors account position changes in real-time, sends immediate notifications for opening and closing positions, and sends daily account total asset reports at fixed times.
+This project is used to monitor position changes and asset status of Binance futures main account and sub-accounts, with notifications through Feishu or Telegram. The system monitors account position changes in real-time, sends immediate notifications for opening and closing positions, and sends daily account total asset reports at fixed times.
 
 ## Features
 
@@ -13,7 +13,9 @@ This project is used to monitor position changes and asset status of Binance fut
 - Real-time monitoring of Binance futures account position changes
 - Automatic identification of opening and closing positions
 - Daily scheduled account total asset reports
-- Notifications through Feishu bot
+- Support daily report auto storage
+- Notifications through Feishu or Telegram
+- Support Telegram query function
 - Customizable monitoring intervals and report times
 - Automatic retry and error notifications
 - Support for position duration statistics
@@ -68,6 +70,8 @@ This project is used to monitor position changes and asset status of Binance fut
 - requests >= 2.26.0
 - schedule >= 1.1.0
 - python-dotenv >= 0.19.0
+- pytz >= 2021.1
+- python-telegram-bot==20.8
 
 ## Installation Steps
 
