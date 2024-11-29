@@ -89,6 +89,44 @@ class TelegramService:
                                 message += f"🔒 占用保证金: {balance['used_balance']:.2f} USDT\n"
                                 message += f"📈 未实现盈亏: {balance['total_unrealized_pnl']:.2f} USDT\n\n"
                             
+                            # 添加持仓信息
+                            positions = []
+                            for account in accounts:
+                                positions.extend(account.get_positions())
+                            
+                            if positions:
+                                # 将持仓按账户分组
+                                main_positions = []
+                                sub_positions = []
+                                
+                                for pos in positions:
+                                    if pos['account_name'] == '主账户':
+                                        main_positions.append(pos)
+                                    else:
+                                        sub_positions.append(pos)
+                                
+                                # 分别对主账户和子账户的持仓按未实现盈亏排序
+                                main_positions.sort(key=lambda x: float(x['unrealizedPnl']), reverse=True)
+                                sub_positions.sort(key=lambda x: float(x['unrealizedPnl']), reverse=True)
+                                
+                                # 先添加主账户持仓
+                                if main_positions:
+                                    message += "📍 主账户持仓:\n\n"
+                                    for pos in main_positions:
+                                        message += f"{pos['base_currency']} "
+                                        message += f"{pos['side']} "
+                                        message += f"{pos['unrealizedPnl']:.2f} USDT ({pos['percentage']:.2f}%)\n\n"
+
+                                # 再添加子账户持仓
+                                if sub_positions:
+                                    message += "📍 子账户持仓:\n\n"
+                                    for pos in sub_positions:
+                                        message += f"{pos['base_currency']} "
+                                        message += f"{pos['side']} "
+                                        message += f"{pos['unrealizedPnl']:.2f} USDT ({pos['percentage']:.2f}%)\n\n"
+                            else:
+                                message += "📍 当前无持仓\n\n"
+                            
                             # 使用当前事件循环的 bot 发送消息
                             await self._async_send_message(self.bot, message)
                         
@@ -163,17 +201,17 @@ class TelegramService:
             if main_positions:
                 message += "📍 主账户持仓:\n\n"
                 for pos in main_positions:
-                    message += f"币种: {pos['base_currency']}\n"
-                    message += f"方向: {pos['side']}\n"
-                    message += f"未实现盈亏: {pos['unrealizedPnl']:.2f} USDT ({pos['percentage']:.2f}%)\n\n"
+                    message += f"{pos['base_currency']} "
+                    message += f"{pos['side']} "
+                    message += f"{pos['unrealizedPnl']:.2f} USDT ({pos['percentage']:.2f}%)\n\n"
 
             # 再添加子账户持仓
             if sub_positions:
                 message += "📍 子账户持仓:\n\n"
                 for pos in sub_positions:
-                    message += f"币种: {pos['base_currency']}\n"
-                    message += f"方向: {pos['side']}\n"
-                    message += f"未实现盈亏: {pos['unrealizedPnl']:.2f} USDT ({pos['percentage']:.2f}%)\n\n"
+                    message += f"{pos['base_currency']} "
+                    message += f"{pos['side']} "
+                    message += f"{pos['unrealizedPnl']:.2f} USDT ({pos['percentage']:.2f}%)\n\n"
         else:
             message += "📍 当前无持仓\n\n"
         
